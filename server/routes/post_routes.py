@@ -1,5 +1,7 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
+import os
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from werkzeug.utils import secure_filename
 from ..models import db, Post, PostImage, Comment, Like, User
 
 post_bp = Blueprint('posts', __name__)
@@ -366,3 +368,49 @@ def add_comment(post_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': f'Error adding comment: {str(e)}'}), 500
+    
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@post_bp.route('/upload-image', methods=['POST'])
+@jwt_required()
+def upload_image():
+    current_user_id = get_jwt_identity()
+
+    if 'image' not in request.files:
+        return jsonify({'message': 'No image file provided'}), 400
+
+    file = request.files['image']
+
+    if file.filename == '':
+        return jsonify({'message': 'No selected file'}), 400
+
+    if not allowed_file(file.filename):
+        return jsonify({'message': 'Unsupported file type'}), 400
+
+    # Secure and save the file
+    filename = secure_filename(file.filename)
+    upload_folder = current_app.config.get('UPLOAD_FOLDER', 'static/uploads')
+    os.makedirs(upload_folder, exist_ok=True)
+    file_path = os.path.join(upload_folder, filename)
+    file.save(file_path)
+
+    # Generate image URL (adjust if you're using a custom domain or storage)
+    image_url = f"/{upload_folder}/{filename}"
+
+    # Optionally link the image to a post
+    post_id = request.form.get('post_id')
+    if post_id:
+        post = Post.query.get_or_404(post_id)
+        if post.user_id != current_user_id:
+            return jsonify({'message': 'Unauthorized to add image to this post'}), 403
+        new_image = PostImage(post_id=post_id, image_url=image_url)
+        db.session.add(new_image)
+        db.session.commit()
+
+    return jsonify({
+        'message': 'Image uploaded successfully',
+        'image_url': image_url
+    }), 201

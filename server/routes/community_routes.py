@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models import db, Community, CommunityMember, User, Post
+from ..schemas import CommunitySchema, community_schema
+from marshmallow import ValidationError
 
 community_bp = Blueprint('communities', __name__)
 
@@ -116,15 +118,16 @@ def create_community():
     data = request.get_json()
     
     # Validate required fields
-    if not data or not data.get('name'):
-        return jsonify({'message': 'Community name is required'}), 400
+    try:
+        validated_data = community_schema.load(data)
+    except ValidationError as err:
+        return jsonify(err.messages), 400
     
     # Create new community
     new_community = Community(
-        name=data['name'],
-        description=data.get('description', ''),
-        creator_id=current_user_id,
-        community_picture=data.get('community_picture', '')
+    name=validated_data['name'],
+    description=validated_data.get('description', ''),
+    creator_id=current_user_id,
     )
     
     try:
@@ -161,12 +164,14 @@ def update_community(community_id):
     data = request.get_json()
     
     # Update community fields
-    if 'name' in data:
-        community.name = data['name']
-    if 'description' in data:
-        community.description = data['description']
-    if 'community_picture' in data:
-        community.community_picture = data['community_picture']
+    try:
+    # Validate with partial=True to allow partial updates
+        validated_data = community_schema.load(data, partial=True)
+    except ValidationError as err:
+        return jsonify(err.messages), 400
+
+    for field, value in validated_data.items():
+        setattr(community, field, value)
     
     try:
         db.session.commit()

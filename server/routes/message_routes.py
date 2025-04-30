@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy import or_, and_
 from ..models import db, Message, User
+from ..schemas import MessageSchema, message_schema
+from marshmallow import ValidationError
 
 message_bp = Blueprint('messages', __name__)
 
@@ -192,8 +194,11 @@ def send_message():
     data = request.get_json()
     
     # Validate required fields
-    if not data or not data.get('content'):
-        return jsonify({'message': 'Message content is required'}), 400
+    try:
+        # Validate input using Marshmallow schema (partial=False by default)
+        validated_data = message_schema.load(data)
+    except ValidationError as err:
+        return jsonify(err.messages), 400
     
     # Check recipient or community
     recipient_id = data.get('recipient_id')

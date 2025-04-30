@@ -2,6 +2,9 @@ from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from ..models import db, User
+from ..schemas import user_schema, UserSchema
+from marshmallow import ValidationError
+
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -11,8 +14,10 @@ def register():
     data = request.get_json()
     
     # Check if required fields are provided
-    if not data or not data.get('username') or not data.get('email') or not data.get('password'):
-        return jsonify({'message': 'Missing required fields'}), 400
+    try:
+        valid_data = UserSchema().load(data)
+    except ValidationError as err:
+        return jsonify({'message': 'Validation error', 'errors': err.messages}), 400
     
     # Check if user already exists
     if User.query.filter_by(username=data['username']).first():

@@ -2,6 +2,9 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash
 from ..models import db, User, UserFollow
+from ..error_handlers import ValidationError, NotFoundError
+from ..schemas import UserSchema, user_schema
+from marshmallow.exceptions import ValidationError as MarshmallowValidationError
 
 user_bp = Blueprint('users', __name__)
 
@@ -38,6 +41,13 @@ def update_user_profile(user_id):
     
     user = User.query.get_or_404(user_id)
     data = request.get_json()
+
+    try:
+      
+        valid_data = user_schema.load(data, partial=True)
+    except MarshmallowValidationError as err:
+        
+        raise ValidationError("Invalid input", errors=err.messages)
     
     # Update user fields
     if 'full_name' in data:

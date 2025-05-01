@@ -1,0 +1,14 @@
+               List of relations
+ Schema |       Name        | Type  |  Owner   
+--------+-------------------+-------+----------
+ public | comments          | table | postgres
+ public | communities       | table | postgres
+ public | community_members | table | postgres
+ public | likes             | table | postgres
+ public | messages          | table | postgres
+ public | post_images       | table | postgres
+ public | posts             | table | postgres
+ public | user_follows      | table | postgres
+ public | users             | table | postgres
+(9 rows)
+

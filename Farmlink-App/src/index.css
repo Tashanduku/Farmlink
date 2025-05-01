@@ -1,3 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+/* index.css */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+/* Set global button styles */
+button {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Set link styles globally */
+a {
+  text-decoration: none;
+  color: #2e7d32;
+}
+
+h1, h2, h3 {
+  font-weight: bold;
+}

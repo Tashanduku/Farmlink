@@ -1,6 +1,7 @@
 import React from 'react';
+import FollowButton from '../common/FollowButton';
 
-const ExpertCard = ({ expert }) => {
+const ExpertCard = ({ expert, loggedInUserId }) => {
   return (
     <div className="flex items-center bg-white rounded-lg overflow-hidden shadow-md p-4 mb-4">
       <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
@@ -19,9 +20,10 @@ const ExpertCard = ({ expert }) => {
           <span>{expert.posts} Posts</span>
         </p>
       </div>
-      <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
-        Follow
-      </button>
+      <FollowButton 
+        currentUserId={loggedInUserId} 
+        recipientId={expert.id} 
+      />
     </div>
   );
 };

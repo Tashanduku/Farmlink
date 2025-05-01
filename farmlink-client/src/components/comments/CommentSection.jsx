@@ -45,7 +45,7 @@ const NavBar = () => {
             to="/blogs/create" 
             className="text-green-600 hover:text-green-800 font-medium"
           >
-            CREATE BLOG
+            CREATE
           </Link>
           <button className="text-gray-600 hover:text-gray-800 font-medium">
             LOG OUT

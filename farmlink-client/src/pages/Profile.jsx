@@ -1,20 +1,9 @@
-// pages/Profile.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 
 const Profile = () => {
   const navigate = useNavigate();
-
-  // Check if the user is authenticated
-  const isLoggedIn = localStorage.getItem('token'); // Adjust as per your authentication logic
-
-  // Redirect to login page if not logged in
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/login');
-    }
-  }, [isLoggedIn, navigate]);
 
   const [formData, setFormData] = useState({
     username: 'jane_farmer',

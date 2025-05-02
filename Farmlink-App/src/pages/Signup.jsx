@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Signup.css'; // Import your CSS file ✅
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -13,20 +14,18 @@ const SignUp = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    // handle signup API call here
     console.log("Sign up:", formData);
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
-      <h2 className="text-2xl font-semibold mb-4 text-center text-green-700">Create Your Account</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="signup-container">
+      <h2>Create Your Account</h2>
+      <form onSubmit={handleSubmit}>
         <input
           name="username"
           onChange={handleChange}
           value={formData.username}
           placeholder="Username"
-          className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <input
           name="email"
@@ -34,7 +33,6 @@ const SignUp = () => {
           value={formData.email}
           type="email"
           placeholder="Email"
-          className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <input
           name="password"
@@ -42,14 +40,8 @@ const SignUp = () => {
           value={formData.password}
           type="password"
           placeholder="Password"
-          className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
         />
-        <button
-          type="submit"
-          className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 transition"
-        >
-          Sign Up
-        </button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );

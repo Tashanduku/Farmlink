@@ -1,13 +1,18 @@
 // src/components/common/Layout.jsx
-import React from 'react';
-import NavBar from './NavBar';
+// components/common/Layout.jsx
+import { Outlet } from 'react-router-dom';
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <NavBar />
-      <main className="container mx-auto px-4 py-8">
-        {children}
+    <div>
+      <header>
+        {/* You can add a navigation bar here */}
+        <nav>
+          {/* Add navigation links if necessary */}
+        </nav>
+      </header>
+      <main>
+        <Outlet /> {/* This renders the nested routes like Profile */}
       </main>
     </div>
   );

@@ -21,7 +21,7 @@ const Login = () => {
     
     try {
       await login(formData);
-      navigate('/blogs');
+      navigate('/Home');
     } catch (err) {
       setError(err.message || 'Login failed. Please check your credentials.');
     } finally {

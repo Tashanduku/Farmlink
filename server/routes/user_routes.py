@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash
@@ -5,6 +6,9 @@ from ..models import db, User, UserFollow
 from ..error_handlers import ValidationError, NotFoundError
 from ..schemas import UserSchema, user_schema
 from marshmallow.exceptions import ValidationError as MarshmallowValidationError
+import base64
+from werkzeug.utils import secure_filename
+from werkzeug.exceptions import BadRequest
 
 user_bp = Blueprint('users', __name__)
 
@@ -34,19 +38,17 @@ def get_user_profile(user_id):
 @user_bp.route('/<int:user_id>', methods=['PUT'])
 @jwt_required()
 def update_user_profile(user_id):
-    # Check if the authenticated user is the user being updated
+    # Authentication check remains the same
     current_user_id = get_jwt_identity()
     if current_user_id != user_id:
         return jsonify({'message': 'Unauthorized'}), 403
-    
+        
     user = User.query.get_or_404(user_id)
     data = request.get_json()
-
+    
     try:
-      
         valid_data = user_schema.load(data, partial=True)
     except MarshmallowValidationError as err:
-        
         raise ValidationError("Invalid input", errors=err.messages)
     
     # Update user fields
@@ -58,18 +60,47 @@ def update_user_profile(user_id):
         user.location = data['location']
     if 'expertise' in data:
         user.expertise = data['expertise']
-    if 'profile_picture' in data:
-        user.profile_picture = data['profile_picture']
+    
+    # Handle profile picture
+    if 'profile_picture' in data and data['profile_picture']:
+        # Check if it's a base64 image
+        if data['profile_picture'].startswith('data:image'):
+            try:
+                # Extract the actual base64 data
+                format, imgstr = data['profile_picture'].split(';base64,')
+                ext = format.split('/')[-1]
+                
+                # Generate a unique filename
+                filename = f"user_{user_id}_{secure_filename(f'profile.{ext}')}"
+                
+                # Create directory if it doesn't exist
+                upload_dir = os.path.join('static/profile_pictures')
+                os.makedirs(upload_dir, exist_ok=True)
+                
+                filepath = os.path.join(upload_dir, filename)
+                
+                # Save the image to the filesystem
+                with open(filepath, "wb") as f:
+                    f.write(base64.b64decode(imgstr))
+                
+                # Store the path in the database
+                user.profile_picture = f"/static/profile_pictures/{filename}"
+            except Exception as e:
+                return jsonify({'message': f'Error processing image: {str(e)}'}), 400
+        else:
+            # It's already a path
+            user.profile_picture = data['profile_picture']
+    
     if 'password' in data and data['password']:
         user.password_hash = generate_password_hash(data['password'])
     
     try:
         db.session.commit()
-        return jsonify({'message': 'Profile updated successfully'}), 200
+        return jsonify({'message': 'Profile updated successfully', 'profile_path': user.profile_picture}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': f'Error updating profile: {str(e)}'}), 500
-
+        
 @user_bp.route('/<int:user_id>/followers', methods=['GET'])
 def get_user_followers(user_id):
     page = request.args.get('page', 1, type=int)
@@ -178,3 +209,4 @@ def unfollow_user(user_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': f'Error unfollowing user: {str(e)}'}), 500
+        z

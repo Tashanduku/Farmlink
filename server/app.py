@@ -11,6 +11,7 @@ from server.routes.user_routes import user_bp
 from server.routes.post_routes import post_bp
 from server.routes.community_routes import community_bp
 from server.routes.message_routes import message_bp
+
 from marshmallow import ValidationError
 from .error_handlers import register_error_handlers
 
@@ -27,12 +28,12 @@ def create_app(config_class=Config):
     CORS(app)
     
     # Register blueprints
-    app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
-    app.register_blueprint(user_bp, url_prefix='/api/v1/users')
+    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(user_bp, url_prefix='/api/users')
     app.register_blueprint(post_bp, url_prefix='/api/v1/posts')
     app.register_blueprint(community_bp, url_prefix='/api/v1/communities')
     app.register_blueprint(message_bp, url_prefix='/api/v1/messages')
-    
+
 
     register_error_handlers(app)
     @app.route('/')

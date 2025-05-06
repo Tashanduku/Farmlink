@@ -13,10 +13,18 @@ class UserSchema(ma.Schema):
     email = fields.Email(required=True)
     password = fields.String(required=True, validate=validate.Length(min=8), load_only=True)
     bio = fields.String(validate=validate.Length(max=500))
+    full_name = fields.String(validate=validate.Length(max=100))
+    location = fields.String(validate=validate.Length(max=100))
+    expertise = fields.String(validate=validate.Length(max=100))
+    is_expert = fields.Boolean()
+
     created_at = fields.DateTime(dump_only=True)
     
     class Meta:
-        fields = ("id", "username", "email", "password", "bio", "created_at")
+        fields = (
+            "id", "username", "email", "password", "bio", 
+            "full_name", "location", "expertise", "is_expert", "created_at" 
+        )
 
 # Post schema for validation
 class PostSchema(ma.Schema):

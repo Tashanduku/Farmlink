@@ -52,6 +52,15 @@ const NavBar = () => {
           </button>
         </div>
       </div>
+      
+      <div className="flex space-x-6 text-lg font-medium">
+        <Link to="/" className="hover:text-green-600">CREATE</Link>
+        <Link to="/logout" className="hover:text-green-600">LOG OUT</Link>
+        <Link to="/blogs" className="hover:text-green-600">BLOGS</Link>
+        <Link to="/communities" className="hover:text-green-600">COMMUNITY</Link>
+        <Link to="/experts" className="hover:text-green-600">EXPERTS</Link>
+        <Link to="/profile" className="hover:text-green-600">PROFILE</Link>
+      </div>
     </nav>
   );
 };

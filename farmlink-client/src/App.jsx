@@ -8,7 +8,7 @@ import Home from './pages/Home';
 import BlogDetail from './pages/BlogDetail';
  feature-branch
 import ExpertList from './components/experts/ExpertList';
-import CommunityList from './components/communities/CommunityList'; // ✅ Add this import
+import CommunityList from './components/communities/CommunityList';
 
 function App() {
   return (

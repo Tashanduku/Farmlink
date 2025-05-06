@@ -1,0 +1,135 @@
+.home-container {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7fc;
+    padding: 40px;
+  }
+  
+  .welcome-section {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .welcome-section h2 {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .welcome-section p {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  section {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 20px;
+    animation: fadeIn 1s ease-out;
+  }
+  
+  section h3 {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  ul li {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  a.view-more-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 15px;
+    background-color: #ff5f00;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  a.view-more-btn:hover {
+    background-color: #ff3d00;
+    transform: scale(1.05);
+  }
+  
+  .blog-post {
+    margin-bottom: 20px;
+  }
+  
+  .blog-post h4 {
+    font-size: 1.4rem;
+    color: #333;
+  }
+  
+  .blog-post p {
+    font-size: 1rem;
+    color: #777;
+  }
+  
+  .blog-post .read-more-link {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .blog-post .read-more-link:hover {
+    color: #005fa3;
+  }
+  
+  .recommendations-section ul li {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .recommendations-section ul li::before {
+    content: "🔔";
+    margin-right: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .home-container {
+      padding: 20px;
+    }
+  
+    section {
+      margin-bottom: 20px;
+      padding: 15px;
+    }
+  
+    h2 {
+      font-size: 1.8rem;
+    }
+  
+    h3 {
+      font-size: 1.4rem;
+    }
+  
+    ul li {
+      font-size: 0.9rem;
+    }
+  
+    a.view-more-btn {
+      padding: 8px 15px;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  

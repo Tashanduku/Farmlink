@@ -14,6 +14,7 @@ import CreateBlog from './pages/CreateBlog';
 import ExpertList from './components/experts/ExpertList';
 import CommunityList from './components/communities/CommunityList';
 import Profile from './pages/Profile';
+import BlogList from './components/blogs/BlogList';
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
 
             {/* Main app routes */}
             <Route path="home" element={<Home />} />
-            <Route path="blogs" element={<Home />} />
+            <Route path="blogs" element={<BlogList />} />
             <Route path="blogs/create" element={<CreateBlog />} />
             <Route path="blogs/:id" element={<BlogDetail />} />
             <Route path="communities" element={<CommunityList />} />

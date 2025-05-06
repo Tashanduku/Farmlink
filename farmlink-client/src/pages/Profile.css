@@ -75,8 +75,8 @@
   }
   
   .save-button {
-    background-color: #28a745;
-    color: white;
+    background-color: #28a74c;
+    color: rgb(251, 12, 12);
   }
   
   .save-button:hover {
@@ -85,7 +85,7 @@
   
   .logout-button {
     background-color: #dc3545;
-    color: white;
+    color: rgb(19, 14, 14);
   }
   
   .logout-button:hover {

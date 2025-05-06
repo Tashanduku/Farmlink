@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Home.css'
+import { useAuth } from '../contexts/AuthContext';  // ✅ Use the hook for cleaner access
+import './Home.css';
 
 const Home = () => {
-  // Simulated user data & content (replace with real data in the future)
-  const userName = 'Silvia Ijaka';
+  const { currentUser } = useAuth();  // ✅ Note: using `currentUser`
+
   const communities = ['Organic Growers', 'Sustainable Farming', 'AgriTech Innovators'];
   const recentPosts = [
     { id: 1, title: '5 Tips for Better Crop Yields', author: 'Dr. Green' },
@@ -19,44 +20,55 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      {/* Welcome Section */}
       <section className="welcome-section">
-        <h2>Welcome back, {userName}! 👋</h2>
+        <h2>Welcome back, {currentUser?.name || 'Farmer'}! 👋</h2>
         <p>Here’s what’s happening on Farmlink today:</p>
       </section>
 
+      {/* Communities Section */}
       <section className="communities-section">
-        <h3>Your Communities</h3>
-        <ul>
+        <h3>Popular Communities</h3>
+        <ul className="community-list">
           {communities.map((community, index) => (
-            <li key={index}>{community}</li>
+            <li key={index} className="community-item">
+              <Link to={`/communities/${community}`} className="community-link">
+                {community}
+              </Link>
+            </li>
           ))}
         </ul>
-        <Link to="/communities" className="btn view-more-btn">View All Communities</Link>
       </section>
 
-      <section className="blog-section">
-        <h3>Recent Blog Posts</h3>
-        {recentPosts.map(post => (
-          <div key={post.id} className="blog-post">
-            <h4>{post.title}</h4>
-            <p>by {post.author}</p>
-            <Link to={`/blogs/${post.id}`} className="read-more-link">Read More</Link>
-          </div>
-        ))}
-        <Link to="/blogs" className="btn view-more-btn">View All Blogs</Link>
+      {/* Recent Posts Section */}
+      <section className="recent-posts-section">
+        <h3>Recent Posts</h3>
+        <ul className="recent-posts-list">
+          {recentPosts.map((post) => (
+            <li key={post.id} className="recent-post-item">
+              <Link to={`/posts/${post.id}`} className="post-link">
+                <h4>{post.title}</h4>
+                <p>by {post.author}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      <section className="recommendations-section">
+      {/* Expert Recommendations Section */}
+      <section className="expert-recommendations-section">
         <h3>Expert Recommendations</h3>
-        <ul>
-          {expertRecommendations.map((rec, index) => (
-            <li key={index}>{rec}</li>
+        <ul className="recommendations-list">
+          {expertRecommendations.map((recommendation, index) => (
+            <li key={index} className="recommendation-item">
+              <p>{recommendation}</p>
+            </li>
           ))}
         </ul>
-        <Link to="/experts" className="btn view-more-btn">Ask an Expert</Link>
       </section>
     </div>
   );
 };
 
 export default Home;
+

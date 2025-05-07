@@ -20,7 +20,7 @@ const NavBar = () => {
             BLOGS
           </Link>
           <Link 
-            to="/community" 
+            to="/communities" 
             className={`font-medium ${location.pathname.startsWith('/community') ? 'text-green-700' : 'text-gray-600 hover:text-green-600'}`}
           >
             COMMUNITY

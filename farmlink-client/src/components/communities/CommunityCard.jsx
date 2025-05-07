@@ -38,7 +38,7 @@ const CommunityCard = ({ community, loggedInUserId }) => {
         }),
       });
 
-      alert('Followed and message sent!');
+  
     } catch (error) {
       console.error('Error following or sending message:', error);
     }

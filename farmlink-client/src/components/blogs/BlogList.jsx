@@ -1,34 +1,35 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchBlogs } from '../../redux/slices/blogSlice';
+import React, { useState, useEffect } from 'react';
 import BlogCard from './BlogCard';
+import blogsData from '../../data/blogs.json';
 
 const BlogList = () => {
-  const dispatch = useDispatch();
-  const { blogs, status, error } = useSelector((state) => state.blogs);
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Only fetch blogs if they haven't been loaded yet
-    if (status === 'idle') {
-      dispatch(fetchBlogs());
-    }
-  }, [status, dispatch]);
+    // In a real app, this would be an API call
+    // Adding a small delay to simulate API fetch
+    const loadBlogs = async () => {
+      try {
+        // Simulating network request
+        setTimeout(() => {
+          setBlogs(blogsData.blogs);
+          setLoading(false);
+        }, 500);
+      } catch (error) {
+        console.log("Error loading blogs:", error);
+        setLoading(false);
+      }
+    };
+    
+    loadBlogs();
+  }, []);
 
-  if (status === 'loading') {
+  if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
-        </div>
-      </div>
-    );
-  }
-
-  if (status === 'failed') {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-center items-center h-64">
-          <p className="text-red-500">Error: {error}</p>
         </div>
       </div>
     );

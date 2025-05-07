@@ -142,11 +142,16 @@ const Profile = () => {
         }
       }
       
-      setSuccess('Profile updated successfully!');
+      if (response.ok) {
+        setSuccess('Profile updated successfully!');
+        alert('Profile updated successfully!'); // ✅ ALERT POPUP
+      } else {
+        const data = await response.json();
+        throw new Error(data.message || 'Failed to update profile');
+      }
     } catch (err) {
       setError(err.message || 'An error occurred while updating your profile');
-    } finally {
-      setIsLoading(false);
+      alert(err.message || 'An error occurred while updating your profile'); // ✅ ALERT POPUP
     }
   };
 
